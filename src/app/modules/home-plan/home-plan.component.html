@@ -1,0 +1,25 @@
+<div class="col-sm-3 house-floors" [class.show-all]="selectedFloors.length > 1">
+    <ul class="floors-list">
+        <li *ngFor="let floor of floors" (click)="selectFloor(floor)" [class.active]="selectedFloors.length == 1 && selectedFloors[0] == floor">{{ floor.name }}</li>
+        <li class="separator"></li>
+        <li  [class.active]="selectedFloors.length > 1" (click)="selectAllFloors()">Tous les plans</li>
+    </ul>
+</div>
+<div class="col-sm-9 house-plan" [class.show-all]="selectedFloors.length > 1">
+    <ng-container *ngFor="let floor of selectedFloors">
+        <h2 class="floor-name">{{ floor.name }}</h2>
+        <gridster [options]="options" #gridster>
+            <gridster-item [item]="room" *ngFor="let room of floor.rooms" [class.inline]="room.displayInline === true">
+                <div class="room-name">{{ room.name }}</div>
+                <div class="room-element" *ngFor="let probe of room.probes">
+                    <ng-container *ngIf="probe != null">
+                        <pih-dht22-sensor *ngIf="probe.type == 0" [probe]="probe" [display]="room.display" class="room-element"></pih-dht22-sensor>
+                        <pih-mini-pir *ngIf="probe.type == 1" [probe]="probe" [display]="room.display" class="room-element"></pih-mini-pir>
+                        <pih-relay *ngIf="probe.type == 2" [relay]="probe" [display]="room.display" class="room-element"></pih-relay>
+                        <pih-photo-resistor *ngIf="probe.type == 3" [probe]="probe" [display]="room.display" class="room-element"></pih-photo-resistor>
+                    </ng-container>
+                </div>
+            </gridster-item>
+        </gridster>
+    </ng-container>
+</div>

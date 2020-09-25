@@ -1,0 +1,27 @@
+.pir-value {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    i {
+        opacity: 0.1;
+        font-size: 20px;
+
+        &.active {
+            opacity: 1;
+        }
+        &.error {
+            opacity: 0.6;
+            color: red;
+        }
+    }
+}
+
+/* sm */
+@media (min-width: 992px) {
+    .pir-value {
+        i {
+            font-size: 30px;
+        }
+    }
+}

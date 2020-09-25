@@ -1,0 +1,209 @@
+:host {
+    // display: block;
+    // position: absolute;
+    // top: 50px;
+    // left: 0;
+    // padding: 5px;
+
+
+    .sticker {
+
+        .gpio {
+            // margin-left: 10px;
+            color: #666;
+            // font-size: 10px;
+            // display: inline-block;
+            vertical-align: text-top;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            color: yellowgreen;
+        }
+
+        .current-temperature {
+            color: #f45b5b;
+            letter-spacing: 1px;
+            
+        }
+
+        .current-humidity {
+            color: #2b908f;
+            letter-spacing: 1px;
+        }
+
+        .correction {
+            margin-top: 20px;
+
+            &:not(:hover) {
+                opacity: 0.4;
+            }
+
+            button:not(:hover){
+                background: transparent;
+            }
+        }
+
+        .current-temperature,
+        .current-humidity {
+            margin-bottom: 20px;
+            // font-size: 14px;
+
+            label {
+                // font-size: 1em;
+                color: #888;
+                margin-top: 10px;
+                display: block;
+            }
+
+            .icon, .value, .unit, .trend {
+                display: inline-block;
+                font-weight: 900;
+            }
+
+            .icon, .value {
+                // font-size: 12px;
+            }
+
+            i.icon {
+                width: 20px;
+                text-align: center;
+                opacity: 0.9;
+            }
+
+            .unit, .trend {
+                display: inline-block;
+                // font-size: 10px;
+            } 
+
+            .trend {
+                display: inline-block;
+                opacity: 0.6;
+            }
+
+            .avg, .min, .max {
+                // font-size: 11px;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 10px;
+                margin-top: 5px;
+            }
+
+            .min, .max {
+                i {
+                    // font-size: 10px;
+                }
+            }
+        }
+
+        &.small,
+        &.mini {
+            .gpio { display: none; }
+            .name {
+                margin-bottom: 10px;
+                display: none;
+            }
+            .current-temperature,
+            .current-humidity {
+                margin-bottom: 0px;
+                .icon.fa-thermometer-2:before {
+                    margin-left: 3px;
+                }
+                .value { text-align: right; }
+                .unit, .trend {
+                    // font-size: 100%;
+                    // width: 20px;
+                    text-align: center;
+                }
+
+                label, .avg, .min, .max {
+                    display: none;
+                }
+            }
+        }
+
+        &.small {
+            .current-temperature,
+            .current-humidity {
+                // font-size: 11px;
+                // height: 36px;
+
+                .icon { width: 20px; }
+                // .value { min-width: 54px; }
+            }
+        }
+
+        &.mini {
+
+            .name {
+                display: none;
+                // font-size: 1.2em;
+                // margin-bottom: 5px;
+            }
+            .current-temperature,
+            .current-humidity {
+                // font-size: 10px;
+                width: 100%;
+                
+                .value { min-width: auto; }
+                .unit { text-align: left; width: auto; }
+                // .icon, .trend { display: block; }
+            }
+        }
+
+        &.inline {
+            display: flex;
+            align-items: center;
+
+            .current-temperature,
+            .current-humidity {
+                width: 50%;
+                display: flex;
+                align-items: baseline;
+                justify-content: center;
+
+                .icon { width: 20px; }
+            }
+        }
+
+        &:not(.inline) {
+        
+            .current-temperature,
+            .current-humidity {
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    @media (min-width: 992px) {
+        .sticker {
+            
+            .current-temperature,
+            .current-humidity {
+
+                .icon, .value {
+                    font-size: 20px;                    
+                }
+                .unit, .trend {
+                    font-size: 18px;                    
+                }
+
+                .avg, .min, .max {
+                    font-size: 16px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: 10px;
+                    margin-top: 5px;
+                }
+    
+                .min, .max {
+                    i {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+        
+}

@@ -1,0 +1,11 @@
+<div class="chart" *ngIf="chartTemp">
+    <div [chart]="chartTemp"></div>
+</div>
+<div class="chart" *ngIf="chartHum">
+    <div [chart]="chartHum"></div>
+</div>
+
+<!-- <div *ngFor="let probe of probes">
+    <h2>{{ probe.name }}</h2>
+    {{ probe.data | json }}
+</div> -->

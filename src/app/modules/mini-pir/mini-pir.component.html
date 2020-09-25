@@ -1,0 +1,6 @@
+<div class="pir-value">
+    <i class="fa fa-user" [ngClass]="{'active': value == 1, 'error': value == 2}"></i>
+    <ng-container *ngIf="probe.errors && probe.errors.length > 0">
+        <span *ngFor="let e of probe.errors">{{e}}</span>
+    </ng-container>
+</div>

@@ -1,0 +1,60 @@
+<ng-container *ngIf="probe != null">
+
+    <div class="sticker {{ display }}">
+        
+        <div class="name">
+            {{ probe.location?.name }}
+            <div class="gpio">GPIO #{{ probe.gpio }}</div>
+        </div>
+        <div class="current-temperature">
+            <label>
+                Température
+            </label>
+            <i class="icon fa fa-thermometer-2"></i>
+            <div class="value">{{ probe.data?.current?.temp | pihNumberFormat }}</div>
+            <div class="unit">°C</div>
+            <div class="trend" *ngIf="probe.data && probe.data.trend">
+                <i class="fa fa-arrow-up" *ngIf="probe.data.trend.temp > 0"></i>
+                <i class="fa fa-arrow-right"  *ngIf="probe.data.trend.temp == 0"></i>
+                <i class="fa fa-arrow-down" *ngIf="probe.data.trend.temp < 0"></i>
+            </div>
+            <br> 
+            <div class="avg">~ {{ probe.data?.average?.temp | pihNumberFormat }}<span class="unit">°C</span></div>
+            <div class="min"><i class="fa fa-arrow-down"></i> {{ probe.data?.min?.temp | pihNumberFormat }}<span class="unit">°C</span></div>
+            <div class="max"><i class="fa fa-arrow-up"></i> {{ probe.data?.max?.temp | pihNumberFormat }}<span class="unit">°C</span></div>
+        </div>
+        <div class="current-humidity">
+            <label>
+                Humidité
+            </label> 
+            <i class="icon glyphicon glyphicon-tint"></i>
+            <div class="value">{{ probe.data?.current?.humidity | pihNumberFormat }}</div>
+            <div class="unit">%</div>
+            <div class="trend" *ngIf="probe.data && probe.data.trend">
+                <i class="fa fa-arrow-up" *ngIf="probe.data.trend.humidity > 0"></i>
+                <i class="fa fa-arrow-right"  *ngIf="probe.data.trend.humidity == 0"></i>
+                <i class="fa fa-arrow-down" *ngIf="probe.data.trend.humidity < 0"></i>
+            </div>
+            <br>
+            <div class="avg">~ {{ probe.data?.average?.humidity | pihNumberFormat }}<span class="unit">%</span></div>
+            <div class="min"><i class="fa fa-arrow-down"></i> {{ probe.data?.min?.humidity | pihNumberFormat }}<span class="unit">%</span></div>
+            <div class="max"><i class="fa fa-arrow-up"></i> {{ probe.data?.max?.humidity | pihNumberFormat }}<span class="unit">%</span></div>
+        </div>
+
+        <div class="correction" *ngIf="showCorrectData == true">
+            <button class="btn btn-warning btn-sm correct-data" (click)="correctData()">
+                <span *ngIf="isCorrectingData; else text">Correction en cours...</span>
+                <ng-template #text>Corriger les données erronées</ng-template>
+                <br><span *ngIf="countCorrections > 0">{{ countCorrections }} données corrigées ( {{ percentCorrections.toFixed(1) }}% )</span>
+            </button>
+            
+        </div>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="probe.errors.length > 0">
+        <ul>
+            <li *ngFor="let error of probe.errors">{{ error }}</li>
+        </ul>
+    </div>
+
+</ng-container>

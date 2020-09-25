@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+html, body {
+    background-color: #111;
+    color: white;
+    font-family: 'Comfortaa', cursive;
+    margin: 0;
+    padding: 0;
+}
+
+header h1 {
+    text-align: center;
+    margin:0;
+    padding: 20px;
+}
+
+pih-dht-sensor {
+    height: 100%;
+    
+}
+
+div.row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #222;
+    padding: 10px 0;
+}
+
+.btn-transparent {
+    background: transparent;
+}
+
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~font-awesome/css/font-awesome.css";

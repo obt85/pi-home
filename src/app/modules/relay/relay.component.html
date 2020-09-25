@@ -1,0 +1,4 @@
+<div class="relay-trigger" (click)="triggerRelay()">
+    <i class="fa fa-lightbulb-o" [ngClass]="{'active': relay.position == 1}"></i>
+    <span class="trigger-text">{{ relay.position == 1 ? 'Eteindre' : 'Allumer' }}</span>
+</div>

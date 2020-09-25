@@ -1,0 +1,184 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media (min-width: 992px) {
+        flex-direction: row;
+    }
+}
+
+
+$plan-height: calc(100vh - 115px);
+$plan-width: 100%;
+
+div.house-floors {
+    height: auto;
+    width: 100%;
+    text-align: center;
+    display: block;
+
+    ul {
+        height: inherit;
+        display: block;
+        width: inherit;
+
+        &, li {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            cursor: pointer;
+            color: #666;
+            font-size: 12px;
+            // line-height: 30px;
+            
+            &.active {
+                color: #DDD;
+            }
+            &:hover {
+                color: white;
+            }
+
+            &.separator {
+                margin-bottom: 5px;
+                border-bottom: 1px solid #333;
+            }
+        }
+    }
+}
+
+div.house-plan {
+    height: auto;
+    width: 100%;
+    display: block;
+
+    h2 {
+        display: none;
+        font-size: 14px;
+        margin: 0;
+        padding: 10px 5px;
+    }
+
+    gridster {
+        display: block;
+        // height: $plan-height;
+        // width: $plan-width;
+        max-height: 95vh;
+        min-height: 400px;
+        max-width: 1200px;
+        // min-width: 800px;
+        height: 400px;
+        margin: auto;
+        background-color: transparent;
+
+        gridster-item {
+            background-color: #333;
+            text-align: center;
+            
+            .room-name {
+                font-size: 10px;
+            }
+
+            .room-element, .room-name {
+                width: 100%;
+                padding: 5px 0;
+                display: block;
+                text-align: center;
+            }
+
+            &.inline {
+                display: -ms-flexbox !important;
+                display: -webkit-flex !important;
+                display: flex !important;
+
+                -ms-flex-align: center !important;
+                -webkit-align-items: center !important;
+                -webkit-box-align: center !important;
+
+                align-items: center !important;
+                
+                .room-name {
+                    margin-top: 0;
+                };
+            }
+        }
+    }
+
+    &.show-all {
+        height: auto;
+
+        h2 {
+            display: block;
+        }
+
+        gridster:not(:last-child) {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+    }
+}
+
+/* sm */
+@media (min-width: 768px) {
+    div.house-plan {
+        gridster {
+            height: 600px;
+        }
+    }
+}
+
+/* md */
+@media (min-width: 992px) {
+    div.house-floors {
+        // height: $plan-height;
+        width: 200px;
+        text-align: right;
+        float: left;
+
+        &.show-all {
+            height: auto;
+            ul {
+                // height: $plan-height;
+            }   
+        }
+
+        ul {
+            display: table-cell;
+            vertical-align: middle;
+
+            li {
+                font-size: 18px;
+            }
+        }
+    }
+
+    div.house-plan {
+        // height: $plan-height;
+        width: calc(100% - 200px);
+        float: left;
+
+        gridster {
+            max-height: 600px;
+            height: 70vh;
+
+            gridster-item {
+                .room-name {
+                    margin-top: 10px;
+                    font-size: 18px;
+                }
+
+                .icon, .value, .unit, .trend {
+                    font-size: 18px;
+                }
+            }
+        }
+
+        
+    }
+}
+
+/* lg */
+@media (min-width: 1200px) {}

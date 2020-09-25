@@ -1,0 +1,34 @@
+<ng-container *ngIf="probe != null">
+
+    <div class="sticker {{ display }}">
+        
+        <div class="name">
+            {{ probe.location?.name }}
+            <div class="gpio">GPIO #{{ probe.gpio }}</div>
+        </div>
+        <div class="sticker-data current-luminosity">
+            <label>
+                Résistance à la lumière
+            </label>
+            <i class="icon fa fa-moon-o"></i>
+            <div class="value">{{ probe.data?.current?.resistance }}</div>
+            <div class="unit"></div>
+            <div class="trend" *ngIf="probe.data && probe.data.trend">
+                <i class="fa fa-arrow-up" *ngIf="probe.data.trend.resistance > 0"></i>
+                <i class="fa fa-arrow-right"  *ngIf="probe.data.trend.resistance == 0"></i>
+                <i class="fa fa-arrow-down" *ngIf="probe.data.trend.resistance < 0"></i>
+            </div>
+            <br> 
+            <div class="avg">~ {{ probe.data?.average?.resistance | pihNumberFormat }}<span class="unit"></span></div>
+            <div class="min"><i class="fa fa-arrow-down"></i> {{ probe.data?.min?.resistance | pihNumberFormat }}<span class="unit"> </span></div>
+            <div class="max"><i class="fa fa-arrow-up"></i> {{ probe.data?.max?.resistance | pihNumberFormat }}<span class="unit"> </span></div>
+        </div>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="probe.errors.length > 0">
+        <ul>
+            <li *ngFor="let error of probe.errors">{{ error }}</li>
+        </ul>
+    </div>
+
+</ng-container>
