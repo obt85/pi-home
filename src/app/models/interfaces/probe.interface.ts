@@ -7,7 +7,7 @@ export interface IProbe {
     name: string;
     description?: string;
     type: IProbeType;
-    gpio: number;
+    gpio?: number;
     data?: IProbeData;
     $data?: Subject<IProbeData>;
     errors?: Array<string>;
@@ -29,6 +29,61 @@ export interface IRelay {
     position: number;
     httpRequest: string;
     location?: ILocation;
+}
+
+export interface IVmc extends IProbe {
+    data?: IVmcData;
+}
+
+export interface IVmcData {
+    history: Array<IVmcDataValue>;
+    current: IVmcDataValue;
+    average?: IVmcDataValue;
+    trend?: IVmcDataValue;
+    min?: IVmcDataValue;
+    max?: IVmcDataValue;
+}
+
+export interface IVmcDataValue {
+    filterRemainingTime?: number;
+    etaFanActive?: number;
+    currentEtaAirflow?: number;
+    bypassLevel?: number;
+    humiditeInterieur?: number;
+    etaConstantFlowSensorValue?: number;
+    supFanActive?: number;
+    temperatureExterieurSortie?: number;
+    supConstantFlowSensorValue?: number;
+    temperatureExterieurEntree?: number;
+    qualiSensorPollutionAlert?: number;
+    supFanSpeed?: number;
+    currentProgramLevel?: string;
+    etaFanSpeed?: number;
+    supFanVoltage?: number;
+    date?: Date;
+    temperatureInterieurSortie?: number;
+    filterUsedTime?: number;
+    humiditeExterieur?: number;
+    currentVentilationLevel?: string;
+    measuredEtaAirflow?: number;
+    measuredSupAirflow?: number;
+    targetSupAirflow?: number;
+    temperatureInterieurEntree?: number;
+    qualiSensorErrorCount?: number;
+    etaFanVoltage?: number;
+    currentSupAirflow?: number;
+    targetEtaAirflow?: number;
+    iaq?: number;
+    co2?: number;
+}
+
+export interface IVmcFilterData {
+    key: string;
+    label: string;
+    checked?: boolean;
+    color?: string;
+    unit?: string;
+    yAxis?: number;
 }
 
 export interface IProbeChart {
@@ -74,7 +129,8 @@ export enum IProbeType {
     DHT22,
     MINIPIR,
     RELAY,
-    PHOTORESISTOR
+    PHOTORESISTOR,
+    VMC
 }
 
 export interface ILocation {

@@ -1,0 +1,50 @@
+<ng-container *ngIf="probe != null">
+
+    <div class="sticker {{ display }}">
+        
+        <div class="name">
+            {{ probe.location?.name }}
+        </div>
+        <div class="sticker-data current-luminosity">
+            <h5>Echange de chaleur</h5>
+            <table>
+                <tr>
+                    <td><label>Extérieur</label></td>
+                    <td></td>
+                    <td><label>Intérieur</label></td>
+                </tr>
+                <tr>
+                    <td class="current-humidity">{{probe.data?.current?.temperatureExterieurEntree}} °C <i class="fa fa-arrow-right"></i></td>
+                    <td rowspan="2">
+                        <div style="width: 100px; display: block;text-align: center;padding-top: 0.2em">VMC</div>
+                    </td>
+                    <td class="current-temperature"><i class="fa fa-arrow-left"></i> {{probe.data?.current?.temperatureInterieurEntree}} °C</td>
+                </tr>
+                <tr>
+                    <td class="current-temperature"> {{probe.data?.current?.temperatureInterieurSortie}} °C <i class="fa fa-arrow-left"></i></td>
+                    <td class="current-humidity"><i class="fa fa-arrow-right"></i> {{probe.data?.current?.temperatureExterieurSortie}} °C</td>
+                </tr>
+            </table>
+            <br>
+            <table>
+                <tr *ngFor="let f of filters2">
+                    <td>{{f.key}}: </td>
+                    <td>
+                        <span *ngIf="probe.data?.current != null">
+                            {{ probe.data?.current[f.key] }}
+                        </span>
+                        <span>{{ f.unit }}</span>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="probe.errors.length > 0">
+        <ul>
+            <li *ngFor="let error of probe.errors">{{ error }}</li>
+        </ul>
+    </div>
+
+</ng-container>

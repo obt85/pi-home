@@ -380,9 +380,9 @@ module.exports = {
       "sourceMap": true,
       "filename": "scripts.bundle.js",
       "scripts": [
-        "/home/pihome/webapp/node_modules/moment/moment.js"
+        "node_modules/moment/moment.js"
       ],
-      "basePath": "/home/pihome/webapp"
+      "basePath": "./"
     }),
     new CopyWebpackPlugin([
       {

@@ -14,6 +14,7 @@ import { PhotoResistorModule } from './modules/photo-resistor/photo-resistor.mod
 import { RelayModule } from './modules/relay/relay.module';
 import { MiniPIRModule } from './modules/mini-pir/mini-pir.module';
 import { TempOverviewComponent } from './modules/temp-overview/temp-overview.component';
+import { VMCModule } from './modules/vmc/vmc.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { TempOverviewComponent } from './modules/temp-overview/temp-overview.com
     MiniPIRModule,
     ChartModule,
     RelayModule,
-    PhotoResistorModule
+    PhotoResistorModule,
+    VMCModule
   ],
   exports: [
   ],

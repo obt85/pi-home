@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IProbe, IProbeType, ILocationType, IRelay, IPhotoResistor } from './models/interfaces/probe.interface';
+import { IProbe, IProbeType, ILocationType, IRelay, IPhotoResistor, IVmc } from './models/interfaces/probe.interface';
 import { Subject } from 'rxjs/Subject';
 
 export const ROOM_CHAMBRE1 = "Chambre Parents";
@@ -281,7 +281,27 @@ export class AppService {
         } as IPhotoResistor;
 
         
+         /**
+         * VMC
+         */
+          let vmc = {
+            id: "VMC",
+            type: IProbeType.VMC,
+            name: "vmc",
+            location: {
+                name: "VMC",
+                type: ILocationType.Room
+            },
+            gpio: null,
+            description: "VMC",
+            errors: [],
+            charts: [],
+            data: {}
+        } as IVmc;
         
+        
+        this.probes.push(vmc);
+
         this.probes.push(probe2);
         this.probes.push(probe3);
         this.probes.push(probe1);

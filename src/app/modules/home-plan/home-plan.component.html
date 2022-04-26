@@ -17,6 +17,7 @@
                         <pih-mini-pir *ngIf="probe.type == 1" [probe]="probe" [display]="room.display" class="room-element"></pih-mini-pir>
                         <pih-relay *ngIf="probe.type == 2" [relay]="probe" [display]="room.display" class="room-element"></pih-relay>
                         <pih-photo-resistor *ngIf="probe.type == 3" [probe]="probe" [display]="room.display" class="room-element"></pih-photo-resistor>
+                        <pih-vmc *ngIf="probe.type == 4" [probe]="probe" [display]="room.display" class="room-element"></pih-vmc>
                     </ng-container>
                 </div>
             </gridster-item>

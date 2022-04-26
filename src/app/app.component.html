@@ -45,30 +45,56 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="probe.type == 3">
-                    <div class="col-sm-3 sensor-details">
-                        <!-- <pih-dht22-sensor [probe]="probe" [showCorrectData]="true" #sensorComponent></pih-dht22-sensor> -->
-                        <pih-photo-resistor [probe]="probe" [showCorrectData]="true" #sensorComponent></pih-photo-resistor>
-                   </div>
-                    <div class="col-sm-9">
-                        <ng-container *ngIf="sensorComponent && probe.charts && probe.charts.length > 0">
-                            <div class="chart" *ngFor="let chart of probe.charts">
-                                
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 0" (click)="sensorComponent.changePeriod(0)">Tout</button>
-                                <span class="buttons-separator">|</span>
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 2" (click)="sensorComponent.changePeriod(2)">Aujourd'hui</button>
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 3" (click)="sensorComponent.changePeriod(3)">Hier</button>
-                                <span class="buttons-separator">|</span>
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 1" (click)="sensorComponent.changePeriod(1)">24h</button>
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 4" (click)="sensorComponent.changePeriod(4)">48h</button>
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 5" (click)="sensorComponent.changePeriod(5)">7j</button>
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 6" (click)="sensorComponent.changePeriod(6)">30j</button>
-                                <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 7" (click)="sensorComponent.changePeriod(7)">1 an</button>
-    
-                                <div [chart]="chart.chart"></div>
-                            </div>
-                        </ng-container>
-                    </div>
-                </ng-container>
+                <div class="col-sm-3 sensor-details">
+                    <!-- <pih-dht22-sensor [probe]="probe" [showCorrectData]="true" #sensorComponent></pih-dht22-sensor> -->
+                    <pih-photo-resistor [probe]="probe" [showCorrectData]="true" #sensorComponent></pih-photo-resistor>
+                </div>
+                <div class="col-sm-9">
+                    <ng-container *ngIf="sensorComponent && probe.charts && probe.charts.length > 0">
+                        <div class="chart" *ngFor="let chart of probe.charts">
+                            
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 0" (click)="sensorComponent.changePeriod(0)">Tout</button>
+                            <span class="buttons-separator">|</span>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 2" (click)="sensorComponent.changePeriod(2)">Aujourd'hui</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 3" (click)="sensorComponent.changePeriod(3)">Hier</button>
+                            <span class="buttons-separator">|</span>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 1" (click)="sensorComponent.changePeriod(1)">24h</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 4" (click)="sensorComponent.changePeriod(4)">48h</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 5" (click)="sensorComponent.changePeriod(5)">7j</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 6" (click)="sensorComponent.changePeriod(6)">30j</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 7" (click)="sensorComponent.changePeriod(7)">1 an</button>
+
+                            <div [chart]="chart.chart"></div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="probe.type == 4">
+                <div class="col-sm-3 sensor-details">
+                    <!-- <pih-dht22-sensor [probe]="probe" [showCorrectData]="true" #sensorComponent></pih-dht22-sensor> -->
+                    <!-- <pih-photo-resistor [probe]="probe" [showCorrectData]="true" #sensorComponent></pih-photo-resistor> -->
+                    <pih-vmc [probe]="probe" [showCorrectData]="true" #sensorComponent></pih-vmc>
+                </div>
+                <div class="col-sm-9">
+                    <ng-container *ngIf="sensorComponent && probe.charts && probe.charts.length > 0">
+                        <div class="chart" *ngFor="let chart of probe.charts">
+                            
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 0" (click)="sensorComponent.changePeriod(0)">Tout</button>
+                            <span class="buttons-separator">|</span>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 2" (click)="sensorComponent.changePeriod(2)">Aujourd'hui</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 3" (click)="sensorComponent.changePeriod(3)">Hier</button>
+                            <span class="buttons-separator">|</span>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 1" (click)="sensorComponent.changePeriod(1)">24h</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 4" (click)="sensorComponent.changePeriod(4)">48h</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 5" (click)="sensorComponent.changePeriod(5)">7j</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 6" (click)="sensorComponent.changePeriod(6)">30j</button>
+                            <button class="btn btn-default btn-sm" [class.active]="sensorComponent.selectedPeriod == 7" (click)="sensorComponent.changePeriod(7)">1 an</button>
+
+                            <div [chart]="chart.chart"></div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
         </div>
 
     </div>
