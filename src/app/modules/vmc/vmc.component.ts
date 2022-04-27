@@ -55,7 +55,7 @@ export class VMCComponent implements OnInit, ISensorComponent {
             { key: "currentProgramLevel", label: ""},
             { key: "bypassLevel", label: "", unit: "%"},
             
-            { key: "etaFanActive", label: "",
+            { key: "etaFanActive", label: ""},
             { key: "supFanActive", label: ""},
             { key: "supFanSpeed", label: "", unit: "rpm"},
             { key: "etaFanSpeed", label: "", unit: "rpm"},
