@@ -145,7 +145,7 @@ export class DHT22SensorComponent implements OnInit, ISensorComponent {
                         days.map( day => this.http.get("assets/data/"+ probe.name + "/data_" + day + ".json").toPromise().then(
                             (result: IDHTData[]) => {
                                 if (result != null && result.length > 0) {
-                                    this.originalData = this.originalData.concat(result);
+                                    // this.originalData = this.originalData.concat(result);
                                     probe.data.history = probe.data.history.concat(result);
                                 }
                             }, error => {}

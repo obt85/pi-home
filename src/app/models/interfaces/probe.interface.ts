@@ -84,6 +84,7 @@ export interface IVmcFilterData {
     color?: string;
     unit?: string;
     yAxis?: number;
+    type?: 'line'|'bar'|'point'|'area';
 }
 
 export interface IProbeChart {

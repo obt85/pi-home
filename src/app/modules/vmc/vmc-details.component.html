@@ -1,0 +1,47 @@
+<ng-container *ngIf="probe && probe.data && probe.data.current">
+    <div class="card">
+        <label>Dernière data</label>
+        <div class="value">{{ probe.data.current.date.substring(10,probe.data.current.date.length - 3) }}</div>
+    </div>
+    <div class="card">
+        <label>Particules</label>
+        <div class="unit">ppm</div>
+        <div class="value" [style.color]="probe.data.current.iaq < 950 ? 'forestgreen' : probe.data.current.iaq < 1500 ? 'darkorange' : 'red'">{{ probe.data.current.iaq }}</div>
+    </div>
+    <div class="card">
+        <label>CO2</label>
+        <div class="unit">ppm</div>
+        <div class="value" [style.color]="probe.data.current.co2 < 950 ? 'forestgreen' : probe.data.current.iaq < 1500 ? 'darkorange' : 'red'">{{ probe.data.current.co2 }}</div>
+    </div>
+    <div class="card">
+        <label>Niveau Ventillation</label>
+        <div class="value">{{ probe.data.current.currentVentilationLevel }}</div>
+        <div class="unit">1-4</div>
+    </div>
+    <div class="card">
+        <label>Volume extrait</label>
+        <div class="unit">m³/h</div>
+        <div class="value" style="color: darkgoldenrod;">{{ probe.data.current.measuredEtaAirflow | pihIntFormat }}</div>
+    </div>
+    <div class="card">
+        <label>Volume insufflé</label>
+        <div class="unit">m³/h</div>
+        <div class="value" style="color: cadetblue;">{{ probe.data.current.measuredSupAirflow | pihIntFormat }}</div>
+    </div>
+    <div class="card">
+        <label>Air extrait</label>
+        <div class="unit">°c</div>
+        <div class="value" style="color: darkgoldenrod;">{{ probe.data.current.temperatureInterieurEntree }}</div>
+    </div>
+    <div class="card">
+        <label>Air insufflé</label>
+        <div class="unit">°c</div>
+        <div class="value" style="color: cadetblue;">{{ probe.data.current.temperatureExterieurSortie }}</div>
+    </div>
+    <div class="card">
+        <label>Net. filtres</label>
+        <div class="value" [style.color]="probe.data.current.filterRemainingTime < 11 ? 'darkorange' : probe.data.current.filterRemainingTime < 0 ? 'red' : ''">{{ probe.data.current.filterRemainingTime }}</div>
+        <div class="unit">jours</div>
+    </div>
+
+</ng-container>

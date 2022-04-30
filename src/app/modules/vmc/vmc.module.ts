@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { VMCComponent } from './vmc.component';
+import { VMCDetailsComponent } from './vmc-details.component';
 import { PipesModule } from '../../shared/pipes/pipes.module';
 
 @NgModule({
@@ -10,10 +11,12 @@ import { PipesModule } from '../../shared/pipes/pipes.module';
         PipesModule
     ],
     exports: [
-        VMCComponent
+        VMCComponent,
+        VMCDetailsComponent
     ],
     declarations: [
-        VMCComponent
+        VMCComponent,
+        VMCDetailsComponent
     ],
     providers: [],
 })

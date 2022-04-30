@@ -5,7 +5,7 @@ import { Chart, Highcharts } from 'angular-highcharts';
 import * as moment from 'moment';
 
 import { HighchartsTheme } from '../../plugins/charts/highcharts-theme.model';
-import { IProbeChartType, ZoomPeriod, IVmc, IVmcDataValue, IVmcFilterData } from '../../models/interfaces/probe.interface';
+import { IProbeChartType, ZoomPeriod, IVmc, IVmcDataValue, IVmcFilterData, IProbe } from '../../models/interfaces/probe.interface';
 import { ISensorComponent } from '../../models/interfaces/sensor-component.interface';
 
 @Component({
@@ -27,7 +27,6 @@ export class VMCComponent implements OnInit, ISensorComponent {
     private originalData: Array<IVmcDataValue>;
     public selectedPeriod: ZoomPeriod;
     public filters: Array<IVmcFilterData>;
-    public filters2: Array<IVmcFilterData>;
 
     constructor(private http: HttpClient) {
         this.selectedPeriod = ZoomPeriod.today;
@@ -42,43 +41,38 @@ export class VMCComponent implements OnInit, ISensorComponent {
             { key: "temperatureInterieurSortie", label: "Temp. air extrait en sortie de VMC", checked: true, color: HighchartsTheme.DarkTheme.colors[2], yAxis: 0, unit: '°C' },
             { key: "iaq", label: "Qualité de l'air", unit: "ppm", checked: true, color: HighchartsTheme.DarkTheme.colors[5], yAxis: 1},
             { key: "co2", label: "CO2", unit: "ppm", checked: true, color: HighchartsTheme.DarkTheme.colors[6], yAxis: 1},
-        ];
+        
+            { key: "filterRemainingTime", label: "Temps restant avant de changer le filtre", unit: "jours"},
+            { key: "filterUsedTime", label: "Filtre utilisé depuis", unit: "jours"},
 
-        this.filters2 = [
-            { key: "filterRemainingTime", label: "", unit: "days"},
-            { key: "filterUsedTime", label: "", unit: "days"},
+            { key: "currentProgramLevel", label: "Programme ventillation", yAxis: 2},
+            { key: "currentVentilationLevel", label: "Niveau ventilation", unit:'(1-4)', yAxis: 2, type: 'bar'},
+            { key: "bypassLevel", label: "Bypass", unit: "%", yAxis: 2, type: 'bar'},
             
-            { key: "iaq", label: "", unit: "ppm"},
-            { key: "co2", label: "", unit: "ppm"},
-
-            { key: "currentVentilationLevel", label: ""},
-            { key: "currentProgramLevel", label: ""},
-            { key: "bypassLevel", label: "", unit: "%"},
+            { key: "etaFanActive", label: "", type: 'bar', yAxis: 2},
+            { key: "supFanActive", label: "", type: 'bar', yAxis: 2},
+            { key: "supFanSpeed", label: "", unit: "rpm", yAxis: 1},
+            { key: "etaFanSpeed", label: "", unit: "rpm", yAxis: 1},
+            { key: "supFanVoltage", label: "", unit: "V", yAxis: 2},
+            { key: "etaFanVoltage", label: "", unit: "V", yAxis: 2},
             
-            { key: "etaFanActive", label: ""},
-            { key: "supFanActive", label: ""},
-            { key: "supFanSpeed", label: "", unit: "rpm"},
-            { key: "etaFanSpeed", label: "", unit: "rpm"},
-            { key: "supFanVoltage", label: "", unit: "V"},
-            { key: "etaFanVoltage", label: "", unit: "V"},
-            { key: "currentEtaAirflow", label: "", unit: "m³/h"},
-            { key: "currentSupAirflow", label: "", unit: "m³/h"},
-            { key: "targetEtaAirflow", label: "", unit: "m³/h"},
-            { key: "targetSupAirflow", label: "", unit: "m³/h"},
-            { key: "measuredEtaAirflow", label: "", unit: "m³/h"},
-            { key: "measuredSupAirflow", label: "", unit: "m³/h"},
+            { key: "currentEtaAirflow", label: "", unit: "m³/h", yAxis: 1},
+            { key: "currentSupAirflow", label: "", unit: "m³/h", yAxis: 1},
+            { key: "targetEtaAirflow", label: "", unit: "m³/h", yAxis: 1},
+            { key: "targetSupAirflow", label: "", unit: "m³/h", yAxis: 1},
+            { key: "measuredEtaAirflow", label: "", unit: "m³/h", yAxis: 1},
+            { key: "measuredSupAirflow", label: "", unit: "m³/h", yAxis: 1},
 
-            { key: "humiditeInterieur", label: "", unit: "%"},
-            { key: "humiditeExterieur", label: "", unit: "%"},
+            { key: "humiditeInterieur", label: "", unit: "%", yAxis: 1},
+            { key: "humiditeExterieur", label: "", unit: "%", yAxis: 1},
 
             { key: "etaConstantFlowSensorValue", label: ""},
             { key: "supConstantFlowSensorValue", label: ""},
             
-            { key: "qualiSensorPollutionAlert", label: ""},
-            { key: "qualiSensorErrorCount", label: ""},
-            
-            
+            { key: "qualiSensorPollutionAlert", label: "", type: 'bar', yAxis: 2},
+            { key: "qualiSensorErrorCount", label: "", type: 'bar', yAxis: 2},
         ];
+
 
         if (this.probe != null && this.probe.data.history == null) {
             this.drawChart();
@@ -95,10 +89,41 @@ export class VMCComponent implements OnInit, ISensorComponent {
 
     public changePeriod(period: ZoomPeriod): void {
         if (period != this.selectedPeriod) {
-            this.setPeriodToData(period);
-            this.populateInfoData();
-            this.updateChart();
+            this.selectedPeriod = period;
+            this.setStartPeriod(period);
+            // this.setPeriodToData(period);
+            this.getData(this.probe).then(() => {
+                this.populateInfoData();
+                this.updateChart();
+            });
         }
+    }
+
+    public checkFilter(f: IVmcFilterData): void {
+        f.checked = !f.checked;
+        
+        if (f.checked) {
+            // let ser: any = this.probe.charts[0].chart.ref.series.find(s => s.options.id == f.key);
+            // if (ser == null) {
+                // ser = this.createSerie(f);
+                // this.probe.charts[0].chart.addSerie(ser);
+            // } else {
+            //     ser.show();
+            // }
+            this.probe.charts[0].chart.addSerie(this.createSerie(f));
+        } else {
+            
+            let i = this.probe.charts[0].chart.ref.series.findIndex(s => s.options.id == f.key);
+            // let ser = this.probe.charts[0].chart.ref.series.find(s => s.options.id == f.key);
+            if (i > -1) {
+                // ser.hide();
+                this.probe.charts[0].chart.removeSerie(i);
+            }
+        }
+        
+        setTimeout(() => {
+            this.updateChart();
+        }, 100);
     }
 
     public correctData(): void {
@@ -118,17 +143,19 @@ export class VMCComponent implements OnInit, ISensorComponent {
             this.probe.data.history = JSON.parse(JSON.stringify(this.originalData));
         } else {
             this.setStartPeriod(period);
-            this.probe.data.history = this.originalData.filter(d => moment(d.date) >= this.startPeriod);
+            if (this.originalData != null) {
+                this.probe.data.history = this.originalData.filter(d => moment(d.date) >= this.startPeriod);
+            }
         }
     }
 
     private setStartPeriod(period: ZoomPeriod): void {
         switch(period) {
             case ZoomPeriod.today:
-                this.startPeriod = moment().hour(0).minute(0).second(0);
+                this.startPeriod = moment().hour(0).minute(0).second(0).milliseconds(0);
                 break;
             case ZoomPeriod.yesterday:
-                this.startPeriod = moment().subtract(1, "days").hour(0).minute(0).second(0);
+                this.startPeriod = moment().subtract(1, "days").hour(0).minute(0).second(0).milliseconds(0);
                 break;
             case ZoomPeriod.last24Hours:
                 this.startPeriod = moment().seconds(0).subtract(24, "hours");
@@ -137,23 +164,30 @@ export class VMCComponent implements OnInit, ISensorComponent {
                 this.startPeriod = moment().subtract(2, "days");
                 break;
             case ZoomPeriod.last7Days:
-                this.startPeriod = moment().subtract(7, "days").hours(0).minutes(0).seconds(0);
+                this.startPeriod = moment().subtract(7, "days").hours(0).minutes(0).seconds(0).milliseconds(0);
                 break;
             case ZoomPeriod.last30days:
-                this.startPeriod = moment().subtract(30, "days").hours(0).minutes(0).seconds(0);
+                this.startPeriod = moment().subtract(30, "days").hours(0).minutes(0).seconds(0).milliseconds(0);
                 break;
             default:
             case ZoomPeriod.year:
-                this.startPeriod = moment(moment().year() + "-01-01");
+                this.startPeriod = moment(moment().year() + "-01-01").hours(0).minutes(0).seconds(0).milliseconds(0);
                 break;
+        }
+    }
+
+    private orderData(probe: IProbe): void {
+        if (probe.data && probe.data.history && probe.data.history.length > 0) {
+            probe.data.history.sort((a, b) => a.date.toString().localeCompare(b.date.toString()));
+            this.originalData = [...probe.data.history];
         }
     }
 
     private getData(probe: IVmc): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            if (probe.data.history != null) {
-                resolve(true);
-            } else {
+            // if (probe.data.history != null) {
+            //     resolve(true);
+            // } else {
                 if (probe.name == null) {
                     reject("Probe name is null !");
                 } else {
@@ -176,12 +210,22 @@ export class VMCComponent implements OnInit, ISensorComponent {
                     Promise.all(
                         days.map( day => this.http.get("assets/data/"+ probe.name + "/data_" + day + ".json").toPromise().then(
                             (result: IVmcDataValue[]) => {
+                                probe.errors = [];
                                 if (result != null && result.length > 0) {
-                                    this.originalData = this.originalData.concat(result);
+                                    // Format some values
+                                    result.forEach(r => {
+                                        r.currentVentilationLevel = r.currentVentilationLevel.substring(r.currentVentilationLevel.length - 1);
+                                        r.currentProgramLevel = r.currentProgramLevel.substring(r.currentProgramLevel.length - 1);
+                                    });
+                                    
+                                    // this.originalData = this.originalData.concat(JSON.parse(JSON.stringify(result)));
                                     probe.data.history = probe.data.history.concat(result);
                                 }
                             }, error => {}
                         ))
+                    ).then(
+                        results => { this.orderData(probe);resolve(true); },
+                        errors => { this.orderData(probe);resolve(true); }
                     );
 
                     
@@ -202,7 +246,7 @@ export class VMCComponent implements OnInit, ISensorComponent {
                     //     }
                     // );
                 }
-            }
+            // }
         });
     }
 
@@ -283,17 +327,34 @@ export class VMCComponent implements OnInit, ISensorComponent {
         let data = this.probe.data;
 
         if (chart != null && chart.chart && chart.chart.ref && chart.chart.ref.series && data != null && data.history != null) {
-            
             this.filters.filter(f => f.checked).forEach((f,i) => {
                 if (chart.chart.ref.series[i] != null) {
-                    chart.chart.ref.series[i].setData(data.history.map(d => [ moment(d.date).valueOf(), parseFloat(d[f.key])]), true, true);
+                    let ser = chart.chart.ref.series.find(s => s.options.id == f.key);
+                    if (ser) {
+                        ser.setData(data.history.map(d => [ moment(d.date).valueOf(), parseFloat(d[f.key])]), true, true);
+                    }
                 }
             });
-            // chart.chart.ref.series[0].setData(data.history.map(d => [ moment(d.date).valueOf(), d.temperatureExterieurEntree]), true, true);
-            // chart.chart.ref.series[1].setData(data.history.map(d => [ moment(d.date).valueOf(), d.temperatureExterieurSortie]), true, true);
-            // chart.chart.ref.series[2].setData(data.history.map(d => [ moment(d.date).valueOf(), d.temperatureInterieurEntree]), true, true);
-            // chart.chart.ref.series[3].setData(data.history.map(d => [ moment(d.date).valueOf(), d.temperatureInterieurSortie]), true, true);
         }
+    }
+
+    private createSerie(f: IVmcFilterData): Highcharts.SeriesOptions {
+        let label = f.label.trim() == "" ? f.key : f.label;
+        let unit = (f.unit && f.unit.trim().length ? f.unit : '');
+        return {
+            id: f.key,
+            color: (f.color && f.color.length ? f.color : null),
+            yAxis: f.yAxis | 0,
+            zIndex: f.type != 'line' ? 1:2,
+            type: (f.type ? f.type : "line"),
+            name: label + ' (' + unit + ')',
+            tooltip: {
+                enabled: true,
+                pointFormat: label + ': {point.y} '+ unit +' <br>',
+                valueDecimals: 1,
+            },
+            data: [ [ this.startPeriod.valueOf(), null ], [ moment().valueOf(), null ] ]
+        } as Highcharts.SeriesOptions
     }
 
     private drawChart(): void {
@@ -310,46 +371,12 @@ export class VMCComponent implements OnInit, ISensorComponent {
             lang: HighchartsTheme.LangFR
         });
 
-        // let data = probe.data;
-        // let serieColor1 = HighchartsTheme.DarkTheme.colors[1];
-        let blueColor = HighchartsTheme.DarkTheme.colors[0];
-        let redColor = HighchartsTheme.DarkTheme.colors[2];
-
-        // SERIE temperatureExterieurEntree
-        // let serie1 = {
-        //     // color: resColor,
-        //     yAxis: 0,
-        //     zIndex: 1,
-        //     type: "spline",
-        //     name: 'Resistance',
-        //     tooltip: {
-        //         enabled: true,
-        //         pointFormat: 'R(ms): {point.y}'
-        //     },
-        //     data: [ [ this.startPeriod.valueOf(), null ], [ moment().valueOf(), null ] ]
-        // } as Highcharts.SeriesOptions;
-
-        let series = this.filters.filter(f => f.checked).map(f => {
-            let serie1 = {
-                color: f.color,
-                yAxis: f.yAxis,
-                // zIndex: 1,
-                type: "line",
-                name: f.label,
-                tooltip: {
-                    enabled: true,
-                    pointFormat: f.label + ': {point.y} '+ f.unit +' <br>',
-                    valueDecimals: 0,
-                },
-                data: [ [ this.startPeriod.valueOf(), null ], [ moment().valueOf(), null ] ]
-            } as Highcharts.SeriesOptions;
-            return serie1;
-        });
+        let series = this.filters.filter(f => f.checked).map(f => this.createSerie(f));
 
         // CHART OPTIONS
         let options: Highcharts.Options = {
             legend: {
-                enabled: true,
+                // enabled: true,
                 // reversed: true
             },
             chart: {
@@ -382,31 +409,34 @@ export class VMCComponent implements OnInit, ISensorComponent {
             yAxis: [
                 {
                     // min: 0,
-                    // max: 50,
+                    // max: 35,
                     // reversed: true,
-                    tickInterval: 1,
+                    // tickInterval: 1,
                     // title: { 
                     //     useHTML: true, 
                     //     text: "<div style='display:inline-block;width:10px;height:10px;background-color:"+serie1.color+"'></div>&nbsp; <b>Résistance (ms)</b>"
                     // },
-                    labels: {
-                        format: "{value} °C"
-                    }
+                    // labels: {
+                    //     format: "{value} °C"
+                    // }
                 } as Highcharts.AxisOptions,
                 {
                     // min: 0,
                     // max: 50,
                     // reversed: true,
-                    tickInterval: 100,
+                    // tickInterval: 100,
                     // title: { 
                     //     useHTML: true, 
                     //     text: "<div style='display:inline-block;width:10px;height:10px;background-color:"+serie1.color+"'></div>&nbsp; <b>Résistance (ms)</b>"
                     // },
-                    labels: {
-                        format: "{value} ppm"
-                    },
+                    // labels: {
+                    //     format: "{value} ppm"
+                    // },
                     opposite: true
-                } as Highcharts.AxisOptions
+                } as Highcharts.AxisOptions,
+                {
+                    opposite: true
+                }
             ],
             series: series
         };
