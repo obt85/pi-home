@@ -29,11 +29,11 @@
             <table>
                 <tr *ngFor="let f of filters" class="tr-filter" [ngClass]="{'checked' : f.checked}" (click)="checkFilter(f)"> 
                     <td><i class="fa fa-check" style="color: green" *ngIf="f.checked"></i> {{ f.label.trim().length ? f.label : f.key }}: </td>
-                    <td>
+                    <td width="100">
                         <span *ngIf="probe.data?.current != null">
-                            {{ probe.data?.current[f.key] }}
+                            {{ probe.data?.current[f.key] }} {{ f.unit }}
                         </span>
-                        <span>{{ f.unit }}</span>
+                        <!-- <span>{{ f.unit }}</span> -->
                     </td>
                 </tr>
             </table>

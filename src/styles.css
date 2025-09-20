@@ -1,3 +1,6 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~font-awesome/css/font-awesome.css";
+
 /* You can add global styles to this file, and also import other style files */
 html, body {
     background-color: #111;
@@ -28,6 +31,3 @@ div.row {
 .btn-transparent {
     background: transparent;
 }
-
-@import "~bootstrap/dist/css/bootstrap.min.css";
-@import "~font-awesome/css/font-awesome.css";

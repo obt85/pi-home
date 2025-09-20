@@ -222,7 +222,7 @@ export class AppService {
         // Sonde 1
         let pir1 = {
             id: "PIR_BUREAU",
-            httpRequest: '//' + document.location.hostname + ":4201",
+            // httpRequest: '//' + document.location.hostname + ":4200/pir/20",
             name: "pir1",
             type: IProbeType.MINIPIR,
             gpio: 20,
@@ -236,7 +236,7 @@ export class AppService {
 		// Sonde 2
         let pir2 = {
             id: "PIR_HALL",
-            httpRequest: '//' + document.location.hostname + ":4203",
+            // httpRequest: '//' + document.location.hostname + ":4200/pir/11",
             name: "pir2",
             type: IProbeType.MINIPIR,
             gpio: 11,
@@ -259,7 +259,7 @@ export class AppService {
                 type: ILocationType.Room
             },
             gpio: 16,
-            httpRequest: '//' + document.location.hostname + ":4202"
+            // httpRequest: '//' + document.location.hostname + ":4202"
         } as IRelay;
 
          /**

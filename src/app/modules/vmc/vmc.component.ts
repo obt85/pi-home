@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { HighchartsTheme } from '../../plugins/charts/highcharts-theme.model';
 import { IProbeChartType, ZoomPeriod, IVmc, IVmcDataValue, IVmcFilterData, IProbe } from '../../models/interfaces/probe.interface';
 import { ISensorComponent } from '../../models/interfaces/sensor-component.interface';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'pih-vmc',
@@ -35,43 +36,43 @@ export class VMCComponent implements OnInit, ISensorComponent {
 
     ngOnInit() {
         this.filters = [
-            { key: "temperatureExterieurEntree", label: "Temp. air insuflé en entrée de VMC", checked: true, color: HighchartsTheme.DarkTheme.colors[0], yAxis: 0, unit: '°C' },
-            { key: "temperatureExterieurSortie", label: "Temp. air insuflé en sortie de VMC", checked: true, color: HighchartsTheme.DarkTheme.colors[0], yAxis: 0, unit: '°C' },
-            { key: "temperatureInterieurEntree", label: "Temp. air extrait en entrée de VMC", checked: true, color: HighchartsTheme.DarkTheme.colors[2], yAxis: 0, unit: '°C' },
-            { key: "temperatureInterieurSortie", label: "Temp. air extrait en sortie de VMC", checked: true, color: HighchartsTheme.DarkTheme.colors[2], yAxis: 0, unit: '°C' },
-            { key: "iaq", label: "Qualité de l'air", unit: "ppm", checked: true, color: HighchartsTheme.DarkTheme.colors[5], yAxis: 1},
-            { key: "co2", label: "CO2", unit: "ppm", checked: true, color: HighchartsTheme.DarkTheme.colors[6], yAxis: 1},
-        
-            { key: "filterRemainingTime", label: "Temps restant avant de changer le filtre", unit: "jours"},
-            { key: "filterUsedTime", label: "Filtre utilisé depuis", unit: "jours"},
+            { key: "temperatureExterieurEntree", label: "Température de l'air insufflé (entrée VMC)", checked: true, color: HighchartsTheme.DarkTheme.colors[0], yAxis: 0, unit: '°C' },
+            { key: "temperatureExterieurSortie", label: "Température de l'air insufflé (sortie VMC)", checked: true, color: HighchartsTheme.DarkTheme.colors[0], yAxis: 0, unit: '°C' },
+            { key: "temperatureInterieurEntree", label: "Température de l'air extrait (entrée VMC)", checked: true, color: HighchartsTheme.DarkTheme.colors[2], yAxis: 0, unit: '°C' },
+            { key: "temperatureInterieurSortie", label: "Température de l'air extrait (sortie VMC)", checked: true, color: HighchartsTheme.DarkTheme.colors[2], yAxis: 0, unit: '°C' },
+            { key: "iaq", label: "Indice qualité de l'air (IAQ)", unit: "ppm", checked: true, color: HighchartsTheme.DarkTheme.colors[5], yAxis: 1 },
+            { key: "co2", label: "Concentration CO₂", unit: "ppm", checked: true, color: HighchartsTheme.DarkTheme.colors[6], yAxis: 1 },
 
-            { key: "currentProgramLevel", label: "Programme ventillation", yAxis: 2},
-            { key: "currentVentilationLevel", label: "Niveau ventilation", unit:'(1-4)', yAxis: 2, type: 'bar'},
-            { key: "bypassLevel", label: "Bypass", unit: "%", yAxis: 2, type: 'bar'},
-            
-            { key: "etaFanActive", label: "", type: 'bar', yAxis: 2},
-            { key: "supFanActive", label: "", type: 'bar', yAxis: 2},
-            { key: "supFanSpeed", label: "", unit: "rpm", yAxis: 1},
-            { key: "etaFanSpeed", label: "", unit: "rpm", yAxis: 1},
-            { key: "supFanVoltage", label: "", unit: "V", yAxis: 2},
-            { key: "etaFanVoltage", label: "", unit: "V", yAxis: 2},
-            
-            { key: "currentEtaAirflow", label: "", unit: "m³/h", yAxis: 1},
-            { key: "currentSupAirflow", label: "", unit: "m³/h", yAxis: 1},
-            { key: "targetEtaAirflow", label: "", unit: "m³/h", yAxis: 1},
-            { key: "targetSupAirflow", label: "", unit: "m³/h", yAxis: 1},
-            { key: "measuredEtaAirflow", label: "", unit: "m³/h", yAxis: 1},
-            { key: "measuredSupAirflow", label: "", unit: "m³/h", yAxis: 1},
+            { key: "filterRemainingTime", label: "Durée restante avant changement du filtre", unit: "jours" },
+            { key: "filterUsedTime", label: "Durée d'utilisation du filtre", unit: "jours" },
 
-            { key: "humiditeInterieur", label: "", unit: "%", yAxis: 1},
-            { key: "humiditeExterieur", label: "", unit: "%", yAxis: 1},
+            { key: "currentProgramLevel", label: "Programme de ventilation actif", yAxis: 2 },
+            { key: "currentVentilationLevel", label: "Niveau de ventilation actuel", unit: '(1-4)', yAxis: 2, type: 'bar' },
+            { key: "bypassLevel", label: "Position du bypass", unit: "%", yAxis: 2, type: 'bar' },
 
-            { key: "etaConstantFlowSensorValue", label: ""},
-            { key: "supConstantFlowSensorValue", label: ""},
-            
-            { key: "qualiSensorPollutionAlert", label: "", type: 'bar', yAxis: 2},
-            { key: "qualiSensorErrorCount", label: "", type: 'bar', yAxis: 2},
-        ];
+            { key: "etaFanActive", label: "Ventilateur extraction actif", type: 'bar', yAxis: 2 },
+            { key: "supFanActive", label: "Ventilateur insufflation actif", type: 'bar', yAxis: 2 },
+            { key: "supFanSpeed", label: "Vitesse ventilateur insufflation", unit: "rpm", yAxis: 1 },
+            { key: "etaFanSpeed", label: "Vitesse ventilateur extraction", unit: "rpm", yAxis: 1 },
+            { key: "supFanVoltage", label: "Tension ventilateur insufflation", unit: "V", yAxis: 2 },
+            { key: "etaFanVoltage", label: "Tension ventilateur extraction", unit: "V", yAxis: 2 },
+
+            { key: "currentEtaAirflow", label: "Débit extraction actuel", unit: "m³/h", yAxis: 1 },
+            { key: "currentSupAirflow", label: "Débit soufflage actuel", unit: "m³/h", yAxis: 1 },
+            { key: "targetEtaAirflow", label: "Débit extraction cible", unit: "m³/h", yAxis: 1 },
+            { key: "targetSupAirflow", label: "Débit soufflage cible", unit: "m³/h", yAxis: 1 },
+            { key: "measuredEtaAirflow", label: "Débit extraction mesuré", unit: "m³/h", yAxis: 1 },
+            { key: "measuredSupAirflow", label: "Débit soufflage mesuré", unit: "m³/h", yAxis: 1 },
+
+            { key: "humiditeInterieur", label: "Humidité intérieure", unit: "%", yAxis: 1 },
+            { key: "humiditeExterieur", label: "Humidité extérieure", unit: "%", yAxis: 1 },
+
+            { key: "etaConstantFlowSensorValue", label: "Valeur capteur débit constant extraction" },
+            { key: "supConstantFlowSensorValue", label: "Valeur capteur débit constant soufflage" },
+
+            { key: "qualiSensorPollutionAlert", label: "Alerte pollution capteur qualité air", type: 'bar', yAxis: 2 },
+            { key: "qualiSensorErrorCount", label: "Nombre d'erreurs capteur qualité air", type: 'bar', yAxis: 2 }
+        ]
 
 
         if (this.probe != null && this.probe.data.history == null) {
@@ -208,7 +209,7 @@ export class VMCComponent implements OnInit, ISensorComponent {
                     probe.data.history = [];
 
                     Promise.all(
-                        days.map( day => this.http.get("assets/data/"+ probe.name + "/data_" + day + ".json").toPromise().then(
+                        days.map( day => this.http.get(environment.apiData + "/assets/data/"+ probe.name + "/data_" + day + ".json").toPromise().then(
                             (result: IVmcDataValue[]) => {
                                 probe.errors = [];
                                 if (result != null && result.length > 0) {
@@ -258,67 +259,41 @@ export class VMCComponent implements OnInit, ISensorComponent {
             let lastData = probe.data.history[probe.data.history.length-1];
             probe.data.current = {
                 date: lastData.date,
-                temperatureExterieurEntree: parseInt(lastData.temperatureExterieurEntree.toString()),
-                temperatureExterieurSortie: parseInt(lastData.temperatureExterieurSortie.toString()),
-                temperatureInterieurEntree: parseInt(lastData.temperatureInterieurEntree.toString()),
-                temperatureInterieurSortie: parseInt(lastData.temperatureInterieurSortie.toString()),
-                filterRemainingTime: lastData.filterRemainingTime,
-                etaFanActive: lastData.etaFanActive,
-                currentEtaAirflow: lastData.currentEtaAirflow,
-                bypassLevel: lastData.bypassLevel,
-                humiditeInterieur: lastData.humiditeInterieur,
-                etaConstantFlowSensorValue: lastData.etaConstantFlowSensorValue,
-                supFanActive: lastData.supFanActive,
-                supConstantFlowSensorValue: lastData.supConstantFlowSensorValue,
-                qualiSensorPollutionAlert: lastData.qualiSensorPollutionAlert,
-                supFanSpeed: lastData.supFanSpeed,
+                temperatureExterieurEntree: lastData.temperatureExterieurEntree != null ? parseInt(lastData.temperatureExterieurEntree.toString()) : undefined,
+                temperatureExterieurSortie: lastData.temperatureExterieurSortie != null ? parseInt(lastData.temperatureExterieurSortie.toString()) : undefined,
+                temperatureInterieurEntree: lastData.temperatureInterieurEntree != null ? parseInt(lastData.temperatureInterieurEntree.toString()) : undefined,
+                temperatureInterieurSortie: lastData.temperatureInterieurSortie != null ? parseInt(lastData.temperatureInterieurSortie.toString()) : undefined,
+                filterRemainingTime: lastData.filterRemainingTime != null ? parseInt(lastData.filterRemainingTime.toString()) : undefined,
+                etaFanActive: lastData.etaFanActive != null ? parseInt(lastData.etaFanActive.toString()) : undefined,
+                currentEtaAirflow: lastData.currentEtaAirflow != null ? parseInt(lastData.currentEtaAirflow.toString()) : undefined,
+                bypassLevel: lastData.bypassLevel != null ? parseInt(lastData.bypassLevel.toString()) : undefined,
+                humiditeInterieur: lastData.humiditeInterieur != null ? parseInt(lastData.humiditeInterieur.toString()) : undefined,
+                etaConstantFlowSensorValue: lastData.etaConstantFlowSensorValue != null ? parseInt(lastData.etaConstantFlowSensorValue.toString()) : undefined,
+                supFanActive: lastData.supFanActive != null ? parseInt(lastData.supFanActive.toString()) : undefined,
+                supConstantFlowSensorValue: lastData.supConstantFlowSensorValue != null ? parseInt(lastData.supConstantFlowSensorValue.toString()) : undefined,
+                qualiSensorPollutionAlert: lastData.qualiSensorPollutionAlert != null ? parseInt(lastData.qualiSensorPollutionAlert.toString()) : undefined,
+                supFanSpeed: lastData.supFanSpeed != null ? parseInt(lastData.supFanSpeed.toString()) : undefined,
                 currentProgramLevel: lastData.currentProgramLevel,
-                etaFanSpeed: lastData.etaFanSpeed,
-                supFanVoltage: lastData.supFanVoltage,
-                filterUsedTime: lastData.filterUsedTime,
-                humiditeExterieur: lastData.humiditeExterieur,
+                etaFanSpeed: lastData.etaFanSpeed != null ? parseInt(lastData.etaFanSpeed.toString()) : undefined,
+                supFanVoltage: lastData.supFanVoltage != null ? parseInt(lastData.supFanVoltage.toString()) : undefined,
+                filterUsedTime: lastData.filterUsedTime != null ? parseInt(lastData.filterUsedTime.toString()) : undefined,
+                humiditeExterieur: lastData.humiditeExterieur != null ? parseInt(lastData.humiditeExterieur.toString()) : undefined,
                 currentVentilationLevel: lastData.currentVentilationLevel,
-                measuredEtaAirflow: lastData.measuredEtaAirflow,
-                measuredSupAirflow: lastData.measuredSupAirflow,
-                targetSupAirflow: lastData.targetSupAirflow,
-                qualiSensorErrorCount: lastData.qualiSensorErrorCount,
-                etaFanVoltage: lastData.etaFanVoltage,
-                currentSupAirflow: lastData.currentSupAirflow,
-                targetEtaAirflow: lastData.targetEtaAirflow,
-                iaq: lastData.iaq,
-                co2: lastData.co2
-            }
+                measuredEtaAirflow: lastData.measuredEtaAirflow != null ? parseInt(lastData.measuredEtaAirflow.toString()) : undefined,
+                measuredSupAirflow: lastData.measuredSupAirflow != null ? parseInt(lastData.measuredSupAirflow.toString()) : undefined,
+                targetSupAirflow: lastData.targetSupAirflow != null ? parseInt(lastData.targetSupAirflow.toString()) : undefined,
+                qualiSensorErrorCount: lastData.qualiSensorErrorCount != null ? parseInt(lastData.qualiSensorErrorCount.toString()) : undefined,
+                etaFanVoltage: lastData.etaFanVoltage != null ? parseInt(lastData.etaFanVoltage.toString()) : undefined,
+                currentSupAirflow: lastData.currentSupAirflow != null ? parseInt(lastData.currentSupAirflow.toString()) : undefined,
+                targetEtaAirflow: lastData.targetEtaAirflow != null ? parseInt(lastData.targetEtaAirflow.toString()) : undefined,
+                iaq: lastData.iaq != null ? parseInt(lastData.iaq.toString()) : undefined,
+                co2: lastData.co2 != null ? parseInt(lastData.co2.toString()) : undefined
+            };
 
             this.filters.filter(f => f.checked).forEach(f => {
                 if (lastData[f.label] != null)
                     probe.data.current[f.key] = lastData[f.label];
             });
-            // Averages | Min - Max
-            // let resAverage = 0;
-            // let resMin = Math.min();
-            // let resMax = Math.max();
-            // data.forEach(v => {
-            //     if (resMin > v.resistance) resMin = v.resistance;
-            //     if (resMax < v.resistance) resMax = v.resistance;
-            //     resAverage += v.resistance;
-            // });
-            // probe.data.average = {
-            //     resistance: resAverage / data.length
-            // }
-            // probe.data.min = {
-            //     resistance: resMin
-            // }
-            // probe.data.max = {
-            //     resistance: resMax
-            // }
-            // // Trends
-            // probe.data.trend = {
-            //     resistance: null
-            // }
-            // let vl = data.length;
-            // if (vl > 2) {
-            //     probe.data.trend.resistance = (data[vl-1].resistance - data[vl-2].resistance);
-            // }
         }
     }
 

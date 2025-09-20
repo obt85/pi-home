@@ -6,7 +6,7 @@
     <div class="card">
         <label>Particules</label>
         <div class="unit">ppm</div>
-        <div class="value" [style.color]="probe.data.current.iaq < 950 ? 'forestgreen' : probe.data.current.iaq < 1500 ? 'darkorange' : 'red'">{{ probe.data.current.iaq }}</div>
+        <div class="value" [style.color]="probe.data.current.iaq < 500 ? 'forestgreen' : probe.data.current.iaq < 1000 ? 'steelblue' : probe.data.current.iaq < 1500 ? 'orange' : probe.data.current.iaq < 2000 ? 'darkorange' : 'red'">{{ probe.data.current.iaq }}</div>
     </div>
     <div class="card">
         <label>CO2</label>

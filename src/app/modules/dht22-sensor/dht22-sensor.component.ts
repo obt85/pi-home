@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { HighchartsTheme } from '../../../app/plugins/charts/highcharts-theme.model';
 import { IProbe, IDHTData, IProbeChartType, ZoomPeriod } from '../../models/interfaces/probe.interface';
 import { ISensorComponent } from '../../models/interfaces/sensor-component.interface';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'pih-dht22-sensor',
@@ -142,7 +143,7 @@ export class DHT22SensorComponent implements OnInit, ISensorComponent {
                     probe.data.history = [];
 
                     Promise.all(
-                        days.map( day => this.http.get("assets/data/"+ probe.name + "/data_" + day + ".json").toPromise().then(
+                        days.map( day => this.http.get(environment.apiData + "/assets/data/"+ probe.name + "/data_" + day + ".json").toPromise().then(
                             (result: IDHTData[]) => {
                                 if (result != null && result.length > 0) {
                                     // this.originalData = this.originalData.concat(result);
@@ -364,30 +365,67 @@ export class DHT22SensorComponent implements OnInit, ISensorComponent {
         
     }
 
+    // private _correctData(): void {
+    //     let history = this.originalData;
+    //     this.countCorrections = 0;
+    //     history.forEach( (data: IDHTData, i) => {
+    //         if (i > 2) {
+    //             //temperature
+    //             let lastAverages: number = (history[i-1].temp + history[i-2].temp) / 2;
+
+    //             if ( (data.temp < (lastAverages / 1.5)) || (data.temp > (lastAverages * 1.5)) ) {
+    //                 data.temp = (history[i-2].temp + history[i-1].temp) / 2;
+    //                 this.countCorrections++;
+    //             }
+
+    //             //humidity
+    //             let lastAveragesHum = (history[i-1].humidity + history[i-2].humidity) / 2;
+
+    //             if ( (data.humidity < (lastAveragesHum / 1.5)) || (data.humidity > (lastAveragesHum * 1.5)) ) {
+    //                 data.humidity = (history[i-2].humidity + history[i-1].humidity) / 2;
+    //                 this.countCorrections++;
+    //             }
+    //         }
+    //     });
+
+    //     this.probe.data.history = JSON.parse(JSON.stringify(history));
+    //     this.percentCorrections = ((this.countCorrections / 2 / this.probe.data.history.length) * 100);
+    // }
+
     private _correctData(): void {
-        let history = this.originalData;
+        const history = this.originalData;
+        const windowSize = 3; // taille de la fenêtre glissante
         this.countCorrections = 0;
-        history.forEach( (data: IDHTData, i) => {
-            if (i > 2) {
-                //temperature
-                let lastAverages: number = (history[i-1].temp + history[i-2].temp) / 2;
-
-                if ( (data.temp < (lastAverages / 1.5)) || (data.temp > (lastAverages * 1.5)) ) {
-                    data.temp = (history[i-2].temp + history[i-1].temp) / 2;
-                    this.countCorrections++;
-                }
-
-                //humidity
-                let lastAveragesHum = (history[i-1].humidity + history[i-2].humidity) / 2;
-
-                if ( (data.humidity < (lastAveragesHum / 1.5)) || (data.humidity > (lastAveragesHum * 1.5)) ) {
-                    data.humidity = (history[i-2].humidity + history[i-1].humidity) / 2;
-                    this.countCorrections++;
-                }
+    
+        const computeAverage = (values: number[]): number =>
+            values.reduce((sum, val) => sum + val, 0) / values.length;
+    
+        const isOutlier = (value: number, avg: number, factor: number = 1.5): boolean =>
+            value < avg / factor || value > avg * factor;
+    
+        for (let i = windowSize; i < history.length; i++) {
+            // extraire les dernières 'windowSize' valeurs
+            const tempWindow = history.slice(i - windowSize, i).map(d => d.temp);
+            const humWindow = history.slice(i - windowSize, i).map(d => d.humidity);
+    
+            const avgTemp = computeAverage(tempWindow);
+            const avgHum = computeAverage(humWindow);
+    
+            // Correction temperature
+            if (isOutlier(history[i].temp, avgTemp)) {
+                history[i].temp = avgTemp;
+                this.countCorrections++;
             }
-        });
-
+    
+            // Correction humidité
+            if (isOutlier(history[i].humidity, avgHum)) {
+                history[i].humidity = avgHum;
+                this.countCorrections++;
+            }
+        }
+    
         this.probe.data.history = JSON.parse(JSON.stringify(history));
-        this.percentCorrections = ((this.countCorrections / 2 / this.probe.data.history.length) * 100);
+        this.percentCorrections =
+            ((this.countCorrections / (2 * this.probe.data.history.length)) * 100);
     }
 }

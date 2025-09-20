@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { MiniPIRComponent } from './mini-pir.component';
+import { PirService } from './pir.service';
 
 @NgModule({
     imports: [
@@ -13,7 +14,7 @@ import { MiniPIRComponent } from './mini-pir.component';
     declarations: [
         MiniPIRComponent
     ],
-    providers: [],
+    providers: [PirService],
 })
 export class MiniPIRModule {
 

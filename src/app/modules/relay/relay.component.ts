@@ -1,10 +1,7 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-import { AppService } from '../../app.service';
-
-import { IProbe, IProbeType, ILocationType, IDHTData, IProbeChartType, ZoomPeriod, IRelay } from '../../models/interfaces/probe.interface';
-import { ISensorComponent } from '../../models/interfaces/sensor-component.interface';
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { IProbeType, IRelay } from '../../models/interfaces/probe.interface';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'pih-relay',
@@ -22,7 +19,7 @@ export class RelayComponent implements OnInit {
             console.error('Probe is not of type Relay !');
             return;
         }
-
+        this.getCurrentPosition();
     }
 
     public triggerRelay(position?: number): void {
@@ -41,7 +38,8 @@ export class RelayComponent implements OnInit {
 
     private postRequest(): void {
         this.http.post(
-            this.relay.httpRequest,
+            // this.relay.httpRequest,
+            environment.apiRelay,
             JSON.stringify({ gpio: this.relay.gpio, position: this.relay.position })
         )
         .toPromise()
@@ -49,9 +47,16 @@ export class RelayComponent implements OnInit {
             // console.log("Post error: ", error);
         })
         .then(
-            (response: any) => {
-                this.relay.position = parseInt(response);
+            (response: {gpio: number, position: number, state: number}) => {
+                // this.relay.position = response.position;
+                this.getCurrentPosition();
             }
         );
+    }
+
+    getCurrentPosition() {
+        this.http.get<Array<number>>(environment.apiRelay).toPromise().then((value: any) => {
+            this.relay.position = value[this.relay.gpio];
+        });
     }
 }

@@ -4,5 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiData: 'http://192.168.85.28',
+  apiPir: 'http://192.168.85.28:4200/pir',
+  apiRelay: 'http://192.168.85.28:4202',
 };

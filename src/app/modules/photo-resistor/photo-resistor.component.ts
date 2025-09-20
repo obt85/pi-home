@@ -9,6 +9,7 @@ import { IProbeType, IProbeChartType, ZoomPeriod } from '../../models/interfaces
 import { AppService } from '../../app.service';
 import { ISensorComponent } from '../../models/interfaces/sensor-component.interface';
 import { IPhotoResistor, IPhotoResistorData, IPhotoResistorDataValue } from './../../models/interfaces/probe.interface';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'pih-photo-resistor',
@@ -112,7 +113,7 @@ export class PhotoResistorComponent implements OnInit, ISensorComponent {
                 if (probe.name == null) {
                     reject("Probe name is null !");
                 } else {
-                    this.http.get("assets/data/"+ probe.name +"/data.json").toPromise().then(
+                    this.http.get(environment.apiData + "/assets/data/"+ probe.name +"/data.json").toPromise().then(
                         (value: IPhotoResistorDataValue[]) => {
                             if (value != null) {
                                 probe.errors = [];
@@ -243,7 +244,7 @@ export class PhotoResistorComponent implements OnInit, ISensorComponent {
                 {
                     // min: 0,
                     // max: 50,
-                    reversed: true,
+                    // reversed: true,
                     tickInterval: 1,
                     title: { 
                         useHTML: true, 
